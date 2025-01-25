@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-node-app-k8s
+  labels:
+    app: my-node-app-k8s
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: my-node-app-k8s
+  template:
+    metadata:
+      labels:
+        app: my-node-app-k8s
+    spec:
+      containers:
+      - name: my-node-app-k8s
+        image: samba642/node-app:02
+        ports:
+        - containerPort: 3000
