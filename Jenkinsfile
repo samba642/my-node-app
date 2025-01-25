@@ -20,22 +20,22 @@ pipeline {
         }
         stage('Push Docker Image') {
             steps {
-                withDockerRegistry([credentialsId: 'docker-hub-credentials', url: '']) {
+                withDockerRegistry([credentialsId: 'docker-hub-credentials', url: 'samba642/test-node-app:tagname']) {
                     sh "docker push $DOCKER_IMAGE:${env.BUILD_NUMBER}"
                 }
             }
         }
-        stage('Deploy to Kubernetes') {
-            steps {
-                withKubeConfig([credentialsId: 'kubernetes-credentials']) {
-                    sh """
-                    kubectl set image deployment/$KUBE_DEPLOYMENT \
-                    $KUBE_DEPLOYMENT=$DOCKER_IMAGE:${env.BUILD_NUMBER} \
-                    --namespace=$KUBE_NAMESPACE
-                    """
-                }
-            }
-        }
+        // stage('Deploy to Kubernetes') {
+        //     steps {
+        //         withKubeConfig([credentialsId: 'kubernetes-credentials']) {
+        //             sh """
+        //             kubectl set image deployment/$KUBE_DEPLOYMENT \
+        //             $KUBE_DEPLOYMENT=$DOCKER_IMAGE:${env.BUILD_NUMBER} \
+        //             --namespace=$KUBE_NAMESPACE
+        //             """
+        //         }
+        //     }
+        // }
     }
     post {
         always {
